@@ -4,6 +4,13 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+## OS X
+.DS_Store
+
+### VS Code ###
+.vscode/
+.code-workspace
+
 ### STS ###
 .apt_generated
 .classpath
@@ -29,5 +36,11 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+## Java
+.mtj.tmp/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
