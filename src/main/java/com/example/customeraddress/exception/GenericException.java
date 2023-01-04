@@ -1,6 +1,5 @@
 package com.example.customeraddress.exception;
 
-import com.example.customeraddress.dto.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +12,5 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 public class GenericException extends RuntimeException {
     private HttpStatus httpStatus;
-    private ErrorCode errorCode;
     private String errorMessage;
 }

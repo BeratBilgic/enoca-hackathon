@@ -58,7 +58,6 @@ public class JwtFilter extends OncePerRequestFilter {
         return header.substring(7);
     }
 
-
     private void sendError(HttpServletResponse res, Exception e) throws IOException {
         res.setContentType("application/json");
         Map<String, String> errors = new HashMap<>();
@@ -67,5 +66,4 @@ public class JwtFilter extends OncePerRequestFilter {
         ObjectMapper mapper = new ObjectMapper();
         res.getWriter().write(mapper.writeValueAsString(errors));
     }
-
 }

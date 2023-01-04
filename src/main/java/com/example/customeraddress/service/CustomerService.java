@@ -1,11 +1,8 @@
 package com.example.customeraddress.service;
 
-import com.example.customeraddress.dto.AddressDto;
 import com.example.customeraddress.dto.CustomerDto;
 import com.example.customeraddress.dto.converter.CustomerDtoConverter;
-import com.example.customeraddress.dto.request.CreateAddressRequest;
 import com.example.customeraddress.exception.GenericException;
-import com.example.customeraddress.model.Address;
 import com.example.customeraddress.model.Customer;
 import com.example.customeraddress.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +17,19 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class CustomerService {
 
-    private final CustomerRepository customerRepository;
+    private final CustomerRepository repository;
     private final CustomerDtoConverter dtoConverter;
 
     public Customer saveRepository(Customer customer){
-        return customerRepository.save(customer);
+        return repository.save(customer);
     }
 
     public Boolean existsByEmail(String email){
-        return customerRepository.existsByEmail(email);
+        return repository.existsByEmail(email);
     }
 
     public Customer findCustomerByEmail(String email) {
-        return customerRepository.findCustomerByEmail(email)
+        return repository.findCustomerByEmail(email)
                 .orElseThrow(notFoundUser(HttpStatus.NOT_FOUND));
     }
 
@@ -41,7 +38,7 @@ public class CustomerService {
     }
 
     public Customer findCustomerById(Long Id) {
-        return customerRepository.findCustomerById(Id)
+        return repository.findById(Id)
                 .orElseThrow(notFoundUser(HttpStatus.NOT_FOUND));
     }
 

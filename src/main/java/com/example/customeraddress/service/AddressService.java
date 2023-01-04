@@ -20,10 +20,22 @@ import java.util.stream.Collectors;
 public class AddressService {
 
     private final CustomerService customerService;
-    private final AddressRepository addressRepository;
+    private final AddressRepository repository;
     private final AddressDtoConverter dtoConverter;
 
+    public Boolean existsByName(String name){
+        return repository.existsByName(name);
+    }
+
     public AddressDto createAddress(CreateAddressRequest request){
+        var isAlreadyExists = existsByName(request.getName());
+
+        if(isAlreadyExists) {
+            throw GenericException.builder()
+                    .httpStatus(HttpStatus.FOUND)
+                    .errorMessage("Address name: " + request.getName() + " is already used").build();
+        }
+
         Customer customer = customerService.findCustomerById(request.getCustomerId());
 
         Address address = new Address().builder()
@@ -35,11 +47,11 @@ public class AddressService {
 
         customer.getAddresses().add(address);
 
-        return dtoConverter.convertToAddressDto(addressRepository.save(address));
+        return dtoConverter.convertToAddressDto(repository.save(address));
     }
 
     protected Address findAddressById(Long Id){
-        return addressRepository.findAddressById(Id).orElseThrow(
+        return repository.findById(Id).orElseThrow(
                 () -> GenericException.builder()
                         .httpStatus(HttpStatus.NOT_FOUND)
                         .errorMessage("Id: "+ Id + " address not found")
@@ -51,23 +63,36 @@ public class AddressService {
     }
 
     public List<AddressDto> getAllAddress() {
-        return addressRepository.findAll()
+        return repository.findAll()
                 .stream()
                 .map(dtoConverter::convertToAddressDto)
                 .collect(Collectors.toList());
     }
 
-    public AddressDto updateAddress(UpdateAddressRequest request){
-        Address address = findAddressById(request.getId());
+    public AddressDto updateAddress(Long id, UpdateAddressRequest request){
+        Customer customer = customerService.findCustomerById(request.getCustomerId());
+
+        Address address = findAddressById(id);
+
+        var isAlreadyExists = existsByName(request.getName());
+
+        if(isAlreadyExists) {
+            throw GenericException.builder()
+                    .httpStatus(HttpStatus.FOUND)
+                    .errorMessage("Address name: " + request.getName() + " is already used").build();
+        }
+
+        address.setName(request.getName());
         address.setCity(request.getCity());
         address.setDistrict(request.getDistrict());
+        address.setCustomer(customer);
 
-        return dtoConverter.convertToAddressDto(addressRepository.save(address));
+        return dtoConverter.convertToAddressDto(repository.save(address));
     }
 
     public void deleteAddress(Long Id){
         Address address = findAddressById(Id);
 
-        addressRepository.delete(address);
+        repository.delete(address);
     }
 }

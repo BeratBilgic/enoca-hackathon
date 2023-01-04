@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class TokenResponseDTO {
     private String accessToken;
-    private CustomerDto customerDto;
+    private CustomerDto customer;
 }

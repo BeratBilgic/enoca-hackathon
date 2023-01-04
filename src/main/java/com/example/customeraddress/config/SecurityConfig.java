@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -42,9 +41,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .headers().frameOptions().disable().and()
+                .headers().frameOptions().disable()
+                .and()
                 .csrf().disable()
                 .cors().and()
+                .authorizeRequests(auth -> {
+                    auth.antMatchers("/api/v1/auth/**").permitAll();
+                    auth.antMatchers("/h2-console/**").permitAll();
+                    auth.anyRequest().authenticated();
+                })
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
@@ -56,10 +61,6 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/api/public", "/h2-console/**", "/api/auth/login","/api/auth/signup","/**");
-    }
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

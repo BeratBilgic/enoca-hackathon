@@ -17,5 +17,7 @@ public class CustomerDto {
 
     private String email;
 
-    private Set<Address> addresses;
+    private String password;
+
+    private Set<CustomerAddressDto> addresses;
 }

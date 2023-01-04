@@ -1,7 +1,6 @@
 package com.example.customeraddress.service;
 
 import com.example.customeraddress.dto.CustomerDto;
-import com.example.customeraddress.dto.ErrorCode;
 import com.example.customeraddress.dto.TokenResponseDTO;
 import com.example.customeraddress.dto.request.LoginRequest;
 import com.example.customeraddress.dto.request.SignUpRequest;
@@ -37,12 +36,11 @@ public class AuthService {
             return TokenResponseDTO
                     .builder()
                     .accessToken(tokenService.generateToken(auth))
-                    .customerDto(customerService.getCustomerDto(loginRequest.getEmail()))
+                    .customer(customerService.getCustomerDto(loginRequest.getEmail()))
                     .build();
         } catch (final BadCredentialsException badCredentialsException) {
             throw GenericException.builder()
                     .httpStatus(HttpStatus.NOT_FOUND)
-                    .errorCode(ErrorCode.CUSTOMER_NOT_FOUND)
                     .errorMessage("Invalid email or Password")
                     .build();
         }
@@ -53,8 +51,9 @@ public class AuthService {
         var isAlreadyRegistered = customerService.existsByEmail(signUpRequest.getEmail());
 
         if(isAlreadyRegistered) {
-            throw GenericException.builder().httpStatus(HttpStatus.FOUND)
-                    .errorMessage(signUpRequest.getEmail() + "is already used").build();
+            throw GenericException.builder()
+                    .httpStatus(HttpStatus.FOUND)
+                    .errorMessage(signUpRequest.getEmail() + " is already used").build();
         }
 
         var customer = Customer.builder()

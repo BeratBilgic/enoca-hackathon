@@ -1,6 +1,5 @@
 package com.example.customeraddress.dto;
 
-import com.example.customeraddress.model.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,14 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressDto {
+public class AddressCustomerDto {
     private Long id;
 
-    private String name;
+    private String email;
 
-    private String city;
-
-    private String district;
-
-    private AddressCustomerDto customer;
+    private String password;
 }

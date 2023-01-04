@@ -32,13 +32,14 @@ public class AddressController {
         return ResponseEntity.ok(addressService.getAllAddress());
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<AddressDto> updateAddress(@Valid @RequestBody UpdateAddressRequest request){
-        return ResponseEntity.ok(addressService.updateAddress(request));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<AddressDto> updateAddress(@PathVariable Long id , @Valid @RequestBody UpdateAddressRequest request){
+        return ResponseEntity.ok(addressService.updateAddress(id, request));
     }
 
     @DeleteMapping("/delete/{Id}")
-    public void delete(@PathVariable Long Id){
+    public ResponseEntity<String> delete(@PathVariable Long Id){
         addressService.deleteAddress(Id);
+        return ResponseEntity.ok().body("Address deleted successfully");
     }
 }
