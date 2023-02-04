@@ -16,6 +16,8 @@ public class CustomerDtoConverter {
     public CustomerDto convertToCustomerDto(Customer from){
         return CustomerDto.builder()
                 .id(from.getId())
+                .creationDate(from.getCreationDate())
+                .updateDate(from.getUpdateDate())
                 .email(from.getEmail())
                 .password(from.getPassword())
                 .addresses(from.getAddresses() == null ? null :

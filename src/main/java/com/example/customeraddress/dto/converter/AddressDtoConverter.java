@@ -14,6 +14,8 @@ public class AddressDtoConverter {
     public AddressDto convertToAddressDto(Address from){
         return AddressDto.builder()
                 .id(from.getId())
+                .creationDate(from.getCreationDate())
+                .updateDate(from.getUpdateDate())
                 .name(from.getName())
                 .city(from.getCity())
                 .district(from.getDistrict())

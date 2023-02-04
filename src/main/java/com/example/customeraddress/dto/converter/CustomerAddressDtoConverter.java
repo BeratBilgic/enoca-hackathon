@@ -10,6 +10,8 @@ public class CustomerAddressDtoConverter {
     public CustomerAddressDto convertToDto(Address from){
         return CustomerAddressDto.builder()
                 .id(from.getId())
+                .creationDate(from.getCreationDate())
+                .updateDate(from.getUpdateDate())
                 .name(from.getName())
                 .city(from.getCity())
                 .district(from.getDistrict())

@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/address")
+@RequestMapping("/api/v1/my-addresses")
 @RequiredArgsConstructor
 public class AddressController {
     private final AddressService addressService;

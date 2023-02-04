@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class UpdateAddressRequest {
-    private Long customerId;
     private String name;
     private String city;
     private String district;

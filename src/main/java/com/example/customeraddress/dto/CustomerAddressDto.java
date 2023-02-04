@@ -5,12 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerAddressDto {
     private Long id;
+
+    private LocalDateTime creationDate;
+
+    private LocalDateTime updateDate;
 
     private String name;
 

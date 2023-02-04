@@ -10,6 +10,8 @@ public class AddressCustomerDtoConverter {
     public AddressCustomerDto convertToDto(Customer from){
         return AddressCustomerDto.builder()
                 .id(from.getId())
+                .creationDate(from.getCreationDate())
+                .updateDate(from.getUpdateDate())
                 .email(from.getEmail())
                 .password(from.getPassword())
                 .build();

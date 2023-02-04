@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
@@ -14,6 +15,10 @@ import java.util.Set;
 @AllArgsConstructor
 public class CustomerDto {
     private Long id;
+
+    private LocalDateTime creationDate;
+
+    private LocalDateTime updateDate;
 
     private String email;
 

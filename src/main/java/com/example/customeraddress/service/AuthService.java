@@ -36,7 +36,7 @@ public class AuthService {
             return TokenResponseDTO
                     .builder()
                     .accessToken(tokenService.generateToken(auth))
-                    .customer(customerService.getCustomerDto(loginRequest.getEmail()))
+                    .customer(customerService.getCustomerDtoByEmail(loginRequest.getEmail()))
                     .build();
         } catch (final BadCredentialsException badCredentialsException) {
             throw GenericException.builder()

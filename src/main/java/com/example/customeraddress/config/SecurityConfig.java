@@ -1,6 +1,6 @@
 package com.example.customeraddress.config;
 
-import com.example.customeraddress.security.JWTAccessDeniedHandler;
+import com.example.customeraddress.security.JwtAccessDeniedHandler;
 import com.example.customeraddress.security.JwtAuthenticationEntryPoint;
 import com.example.customeraddress.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
-    private final JWTAccessDeniedHandler accessDeniedHandler;
+    private final JwtAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> {
                     auth.antMatchers("/api/v1/auth/**").permitAll();
                     auth.antMatchers("/h2-console/**").permitAll();
+                    auth.antMatchers("/swagger-ui.html").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .formLogin().disable()

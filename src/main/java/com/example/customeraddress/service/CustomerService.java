@@ -8,12 +8,15 @@ import com.example.customeraddress.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class CustomerService {
 
@@ -33,19 +36,20 @@ public class CustomerService {
                 .orElseThrow(notFoundUser(HttpStatus.NOT_FOUND));
     }
 
-    public CustomerDto getCustomerDto(String email) {
+    public CustomerDto getCustomerDtoByEmail(String email) {
         return dtoConverter.convertToCustomerDto(findCustomerByEmail(email));
     }
 
-    public Customer findCustomerById(Long Id) {
-        return repository.findById(Id)
-                .orElseThrow(notFoundUser(HttpStatus.NOT_FOUND));
+    public Customer getCustomerInTokenContext() {
+        final Authentication authentication = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).orElseThrow(notFoundUser(HttpStatus.UNAUTHORIZED));
+        final UserDetails details = Optional.ofNullable((UserDetails) authentication.getPrincipal()).orElseThrow(notFoundUser(HttpStatus.UNAUTHORIZED));
+        return findCustomerByEmail(details.getUsername());
     }
 
-    private static Supplier<GenericException> notFoundUser(HttpStatus unauthorized) {
+    private static Supplier<GenericException> notFoundUser(HttpStatus httpStatus) {
         return () -> GenericException
                 .builder()
-                .httpStatus(unauthorized)
+                .httpStatus(httpStatus)
                 .errorMessage("customer not found!")
                 .build();
     }

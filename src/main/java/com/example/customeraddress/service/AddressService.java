@@ -36,7 +36,7 @@ public class AddressService {
                     .errorMessage("Address name: " + request.getName() + " is already used").build();
         }
 
-        Customer customer = customerService.findCustomerById(request.getCustomerId());
+        Customer customer = customerService.getCustomerInTokenContext();
 
         Address address = new Address().builder()
                 .name(request.getName())
@@ -59,20 +59,37 @@ public class AddressService {
     }
 
     public AddressDto getAddress(Long Id){
-        return dtoConverter.convertToAddressDto(findAddressById(Id));
+        Customer customer = customerService.getCustomerInTokenContext();
+        Address address = findAddressById(Id);
+
+        if (address.getCustomer().getId() != customer.getId())
+            throw GenericException.builder()
+                    .httpStatus(HttpStatus.UNAUTHORIZED)
+                    .errorMessage("{"+customer.getEmail()+"} you can only get your own address")
+                    .build();
+
+        return dtoConverter.convertToAddressDto(address);
     }
 
     public List<AddressDto> getAllAddress() {
-        return repository.findAll()
+        Customer customer = customerService.getCustomerInTokenContext();
+
+        return customer.getAddresses()
                 .stream()
                 .map(dtoConverter::convertToAddressDto)
                 .collect(Collectors.toList());
     }
 
     public AddressDto updateAddress(Long id, UpdateAddressRequest request){
-        Customer customer = customerService.findCustomerById(request.getCustomerId());
+        Customer customer = customerService.getCustomerInTokenContext();
 
         Address address = findAddressById(id);
+
+        if (address.getCustomer().getId() != customer.getId())
+            throw GenericException.builder()
+                    .httpStatus(HttpStatus.UNAUTHORIZED)
+                    .errorMessage("{"+customer.getEmail()+"} you can only update your own address")
+                    .build();
 
         var isAlreadyExists = existsByName(request.getName());
 
@@ -91,7 +108,14 @@ public class AddressService {
     }
 
     public void deleteAddress(Long Id){
+        Customer customer = customerService.getCustomerInTokenContext();
         Address address = findAddressById(Id);
+
+        if (address.getCustomer().getId() != customer.getId())
+            throw GenericException.builder()
+                    .httpStatus(HttpStatus.UNAUTHORIZED)
+                    .errorMessage("{"+customer.getEmail()+"} you can only delete your own address")
+                    .build();
 
         repository.delete(address);
     }

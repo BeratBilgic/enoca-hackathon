@@ -2,7 +2,6 @@ package com.example.customeraddress.dto.request;
 
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
@@ -10,8 +9,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Data
 public class CreateAddressRequest {
-    @NotNull
-    private Long customerId;
     @NotNull
     private String name;
     @NotNull
